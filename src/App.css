@@ -5,9 +5,9 @@
   left: 0;
   right: 0;
   top: 2%;
-  box-shadow: 5px 10px #888888;
   margin: auto;
   padding: 3%;
+  border-radius: 10px;
 }
 
 .row1{
@@ -17,6 +17,16 @@
 .column1-1, .column1-2, .column1-3{
   flex: 100%;
   text-align: center;
+}
+
+.card-1, .card-2, .card-3{
+  border: 1px solid black;
+  border-radius: 15px;
+  text-align: center;
+  margin-left: 40%;
+  margin-right: 40%;
+  padding: 50px 20px;
+  font-weight: bold;
 }
 
 .buttons{
