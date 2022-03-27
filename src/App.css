@@ -1,0 +1,37 @@
+.in-between{
+  width: 70%;
+  background-color: #F8F0E3;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2%;
+  box-shadow: 5px 10px #888888;
+  margin: auto;
+  padding: 3%;
+}
+
+.row1{
+  display: flex;
+}
+
+.column1-1, .column1-2, .column1-3{
+  flex: 100%;
+  text-align: center;
+}
+
+.buttons{
+  text-align: center;
+}
+
+.btn1, .btn2{
+  flex: 100%;
+  margin: 10px;
+  font-size: 19px;
+}
+
+.btn1
+
+.row2{
+  width: 65%;
+  text-align: center;
+}
