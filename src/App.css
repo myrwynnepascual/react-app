@@ -42,13 +42,11 @@
   text-align: center;
 }
 
-.btn1, .btn2{
+#btn1, #btn2, #btn3{
   flex: 100%;
   margin: 10px;
   font-size: 19px;
 }
-
-.btn1
 
 .row2{
   width: 65%;
