@@ -1,35 +1,137 @@
 import './App.css';
 
+import React, { useState } from "react";
+
 function App() {
+  const random = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+  const [card_1, setcard_1] = useState(random(1, 13));
+  const [card_2, setcard_2] = useState(random(1, 13));
+  const [card_3, setcard_3] = useState(random(1, 13));
+  const [score, setScore] = useState(0);
+  const [iteration, setIteration] = useState(0);
+  const [result, setResult] = useState("");
+  var dealbtn = document.getElementById("dealbtn");
+  var nodealbtn = document.getElementById("nodealbtn");
 
-  var score_label = 'Score: ';
-  var current_score = 0;
-  var final_score = score_label + current_score;
+  const getIteration = () => {
+    return iteration;
+  };
 
-  var round_label = 'Round: ';
-  var round_count = 0;
-  var round = round_label +round_count;
+  const getScore = () => {
+    return score;
+  };
 
-  var random_card1 = Math.floor(Math.random() * 13 ) + 1;
-  var random_card2 = Math.floor(Math.random() * 13 ) + 1;
-  var random_card3 = Math.floor(Math.random() * 13 ) + 1;
+  const getcard_1 = () => {
+    return card_1;
+  };
 
-  var card_1 = random_card1;
-  var card_2 = random_card2;
-  var card_3 = random_card3;
+  const getcard_2 = () => {
+    return card_2;
+  };
 
 
-  function draw_card_3(){
-    var card_3 =+ Math.floor(Math.random() * 13 ) + 1;
+  const getcard_3 = () => {
     return card_3;
-  }
+  };
 
-  function reset_game(){
+  const generate = () => {
+    setcard_1(random(1, 13));
+    setcard_2(random(1, 13));
+    setcard_3(random(1, 13));
 
-  }
+    if (iteration == 4) {
+      dealbtn.disabled = true;
+      nodealbtn.disabled = true;
+    }
+  };
 
+  
 
+  const resultUpdateWin = () => {
+    setResult(`Bingo! The third number is ${getcard_3()}`);
+  };
 
+  const resultUpdateLose = () => {
+    setResult(`Too bad! The third number is ${getcard_3()}`);
+  };
+
+  const resultUpdateNoDeal = () => {
+    setResult(`No Deal! The third number is ${getcard_3()}`);
+  };
+
+  const resultUpdateSame = () => {
+    setResult(`Unlucky! All of the numbers are ${getcard_3()}`);
+  };
+
+  const LabelCheck = (label) => {
+    if (card_1 == card_2) {
+      return label == 0 ? "Higher" : "Lower";
+    } else {
+      return label == 0 ? "Deal" : "No Deal";
+    }
+  };
+
+  const InBet = (bet) => {
+    if (!(card_1 == card_2 && card_2 == card_3)) {
+      if (getIteration() <= 5) {
+        const high = card_1 > card_2 ? card_1 : card_2;
+        const low = card_1 < card_2 ? card_1 : card_2;
+        if (bet == "Deal") {
+          if (card_3 > low && card_3 < high) {
+            setScore(getScore() + 1);
+            resultUpdateWin();
+          } else {
+            setScore(getScore() - 1);
+            resultUpdateLose();
+          }
+          generate();
+          setIteration(getIteration() + 1);
+        } else if (bet == "No Deal") {
+          setScore(getScore() - 0.5);
+          resultUpdateNoDeal();
+          generate();
+        setIteration(getIteration() + 1);
+        } else if (bet == "Higher") {
+          if (card_3 > high) {
+            setScore(getScore() + 1);
+            resultUpdateWin();
+          } else {
+            setScore(getScore() - 1);
+            resultUpdateLose();
+          }
+          generate();
+          setIteration(getIteration() + 1);
+        } else if (bet == "Lower") {
+          if (card_3 < high) {
+            setScore(getScore() + 1);
+            resultUpdateWin();
+          } else {
+            setScore(getScore() - 1);
+            resultUpdateLose();
+          }
+          generate();
+          setIteration(getIteration() + 1);
+        }
+        
+      } else {
+        setScore(getScore() - 1);
+        resultUpdateSame();
+      }
+
+      
+    }
+  };
+
+  const reset = () => {
+    generate();
+    setScore(0);
+    setIteration(0);
+    dealbtn.disabled = false;
+    nodealbtn.disabled = false;
+    setResult("");
+  };
   return (
     <div className='container'>
 
@@ -58,7 +160,7 @@ function App() {
           <li>If you chose "Lower" and the 3rd card is lower than the number in the first 2 cards, you will get 1 point. Otherwise, you lose 1 point. </li>
         </p>
 
-        <h3>{round} <br></br> {final_score} </h3>
+        <h3>{iteration} <br></br> {score} </h3>
 
         <div className='row1'>
 
@@ -72,25 +174,37 @@ function App() {
             <p className='card-2'>{card_2}</p>
           </div>
 
-          <div className='column1-3'>
-            <h3>Card 3</h3>
-            <p className='card-3'>{card_3}</p>
-          </div>
-
         </div>
-
+        
         <div className='row-2'>
 
           <div className='buttons'>
-            <button className='btn1' onClick={draw_card_3}>Deal</button>
-            <button className='btn2'onClick={draw_card_3}>No Deal</button>
-            {/* <button className='reset' onClick={}>Reset</button> */}
+            <button id='dealbtn' value={LabelCheck(0)} onClick={(evt) => {InBet(evt.target.value);}}>Deal</button>
+            <button id='nodealbtn' value={LabelCheck(1)} onClick={(evt) => {InBet(evt.target.value);}}>No Deal</button>
+            <button id='resetbtn' value="Reset" onClick={() => {reset();}}>Reset</button>
           </div>
 
         </div>
+        <div className='prevrow'>
+        <h1>Previous Results</h1>
+          <div className='prevrow-1'>
+            <h3>Card 1</h3>
+            <p className='card-1'>{getcard_1()}</p>
+          </div>
 
+          <div className='prevrow-2'>
+            <h3>Card 2</h3>
+            <p className='card-2'>{getcard_2()}</p>
+          </div>
+
+          <div className='prevrow-3'>
+            <h3>Card 3</h3>
+            <p className='card-3'>{getcard_3()}</p>
+          </div>
+
+        </div>
         <div className='row3'>
-          <p className='result'></p>
+          <p className='result'>{result}</p>
         </div>
 
       </div>

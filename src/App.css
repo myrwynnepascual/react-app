@@ -14,10 +14,19 @@
   display: flex;
 }
 
-.column1-1, .column1-2, .column1-3{
+.column1-1, .column1-2{
   flex: 100%;
   text-align: center;
 }
+.prevrow{
+  display: flex;
+}
+.prevrow-1, .prevrow-2, .prevrow-3{
+  flex: 100%;
+  text-align: center;
+}
+
+
 
 .card-1, .card-2, .card-3{
   border: 1px solid black;
