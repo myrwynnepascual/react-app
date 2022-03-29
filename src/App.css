@@ -57,6 +57,10 @@
   font-weight: bold;
 }
 
+#btn1:disabled, #btn2:disabled{
+  background-color: #552b1d;
+}
+
 .row2{
   width: 65%;
   text-align: center;
