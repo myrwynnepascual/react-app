@@ -3,17 +3,20 @@ import './App.css';
 import React, { useState } from "react";
 
 function App() {
+
   const random = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
   };
+  
   const [card_1, setcard_1] = useState(random(1, 13));
   const [card_2, setcard_2] = useState(random(1, 13));
   const [card_3, setcard_3] = useState(random(1, 13));
   const [score, setScore] = useState(0);
-  const [iteration, setIteration] = useState(0);
+  const [iteration, setIteration] = useState(1);
   const [result, setResult] = useState("");
-  var dealbtn = document.getElementById("dealbtn");
-  var nodealbtn = document.getElementById("nodealbtn");
+
+  var button1 = document.getElementById("btn1");
+  var button2 = document.getElementById("btn2");
 
   const getIteration = () => {
     return iteration;
@@ -41,13 +44,28 @@ function App() {
     setcard_2(random(1, 13));
     setcard_3(random(1, 13));
 
-    if (iteration == 4) {
-      dealbtn.disabled = true;
-      nodealbtn.disabled = true;
+    if (iteration == 5) {
+      button1.disabled = true;
+      button2.disabled = true;
     }
   };
 
-  
+  //USED TO AVOID NEGATIVE SCORE
+  const scoreDealHigherLowerLose = () => {
+    if(getScore() <= 0){             
+      setScore(getScore());
+    } else {
+      setScore(getScore() - 1);
+    }
+  }
+
+  const scoreNoDeal = () => {
+    if(getScore() <= 0){             
+      setScore(getScore());
+    } else {
+      setScore(getScore() - 0.5);
+    }
+  }
 
   const resultUpdateWin = () => {
     setResult(`Bingo! The third number is ${getcard_3()}`);
@@ -74,48 +92,92 @@ function App() {
   };
 
   const InBet = (bet) => {
+
     if (!(card_1 == card_2 && card_2 == card_3)) {
       if (getIteration() <= 5) {
-        const high = card_1 > card_2 ? card_1 : card_2;
+
+        //GET HIGHER CARD
+        const high = card_1 > card_2 ? card_1 : card_2;  
+        
+        //GET LOWER CARD
         const low = card_1 < card_2 ? card_1 : card_2;
+
+
+        //USER CHOSE DEAL
         if (bet == "Deal") {
-          if (card_3 > low && card_3 < high) {
+
+          //card 3 IS IN BETWEEN -> USER WIN
+          if (card_3 > low && card_3 < high) {              
+            
             setScore(getScore() + 1);
             resultUpdateWin();
-          } else {
-            setScore(getScore() - 1);
+
+          } 
+          
+          //card 3 IS NOT IN BETWEEN -> USER LOSE
+          else {                                        
+
+            scoreDealHigherLowerLose();
             resultUpdateLose();
           }
+
+          //DRAW CARDS AGAIN AND MOVE TO NEXT ROUND
           generate();
           setIteration(getIteration() + 1);
-        } else if (bet == "No Deal") {
-          setScore(getScore() - 0.5);
+        } 
+        
+        //USER CHOSE NO DEAL
+        else if (bet == "No Deal") {
+
+          scoreNoDeal();
           resultUpdateNoDeal();
+          
+          //DRAW CARDS AGAIN AND MOVE TO NEXT ROUND
           generate();
-        setIteration(getIteration() + 1);
-        } else if (bet == "Higher") {
+          setIteration(getIteration() + 1);
+
+        } 
+        
+        //USER CHOSE HIGHER
+        else if (bet == "Higher") {
+
+          //card 3 is HIGHER -> USER WIN
           if (card_3 > high) {
             setScore(getScore() + 1);
             resultUpdateWin();
-          } else {
-            setScore(getScore() - 1);
+          } 
+          
+          //card 3 is LOWER -> USER LOSE
+          else {
+            scoreDealHigherLowerLose();
             resultUpdateLose();
           }
+
           generate();
           setIteration(getIteration() + 1);
-        } else if (bet == "Lower") {
+        }
+
+        //USER CHOSE LOWER
+        else if (bet == "Lower") {
+          
+          //card 3 is LOWER -> USER WIN
           if (card_3 < high) {
             setScore(getScore() + 1);
             resultUpdateWin();
-          } else {
-            setScore(getScore() - 1);
+          } 
+          
+          //card 3 is HIGHER -> USER LOSE
+          else {
+            scoreDealHigherLowerLose();
             resultUpdateLose();
           }
           generate();
           setIteration(getIteration() + 1);
         }
         
-      } else {
+      } 
+      
+      else {
         setScore(getScore() - 1);
         resultUpdateSame();
       }
@@ -127,11 +189,12 @@ function App() {
   const reset = () => {
     generate();
     setScore(0);
-    setIteration(0);
-    dealbtn.disabled = false;
-    nodealbtn.disabled = false;
+    setIteration(1);
+    button1.disabled = false;
+    button2.disabled = false;
     setResult("");
   };
+  
   return (
     <div className='container'>
 
@@ -150,7 +213,7 @@ function App() {
 
           <p>If the 2 numbers in the card are <strong>NOT identical</strong>:</p>
           <li>If you chose "Deal" and the 3rd card is in between the 2 numbers in the cards, you will get 1 point. Otherwise, you lose 1 point.</li>
-          <li>If you chose "No Deal" and the 3rd card is in between the 2 numbers in the cards, you will lose 0.5 point.</li>
+          <li>If you chose "No Deal", you will lose 0.5 point.</li>
 
           <br></br>
 
@@ -160,7 +223,7 @@ function App() {
           <li>If you chose "Lower" and the 3rd card is lower than the number in the first 2 cards, you will get 1 point. Otherwise, you lose 1 point. </li>
         </p>
 
-        <h3>{iteration} <br></br> {score} </h3>
+        <h3>Round: {iteration} <br></br> Score: {score} </h3>
 
         <div className='row1'>
 
@@ -179,12 +242,13 @@ function App() {
         <div className='row-2'>
 
           <div className='buttons'>
-            <button id='dealbtn' value={LabelCheck(0)} onClick={(evt) => {InBet(evt.target.value);}}>Deal</button>
-            <button id='nodealbtn' value={LabelCheck(1)} onClick={(evt) => {InBet(evt.target.value);}}>No Deal</button>
-            <button id='resetbtn' value="Reset" onClick={() => {reset();}}>Reset</button>
+            <input type="button" id='btn1' value={LabelCheck(0)} onClick={(evt) => {InBet(evt.target.value);}} />
+            <input type="button" id='btn2' value={LabelCheck(1)} onClick={(evt) => {InBet(evt.target.value);}} />
+            <input type="button" id='btn3' value="Reset" onClick={() => {reset();}}Reset />
           </div>
 
         </div>
+        
         <div className='prevrow'>
         <h1>Previous Results</h1>
           <div className='prevrow-1'>
