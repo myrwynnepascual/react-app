@@ -5,17 +5,19 @@
   left: 0;
   right: 0;
   top: 2%;
+  bottom: 2%;
   margin: auto;
-  padding: 3%;
+  padding: 2% 5%;
   border-radius: 10px;
 }
 
 .row1{
   display: flex;
+  justify-content: center;
 }
 
 .column1-1, .column1-2{
-  flex: 100%;
+  width: 30%;
   text-align: center;
 }
 .prevrow{
@@ -29,7 +31,7 @@
 
 
 .card-1, .card-2, .card-3{
-  border: 1px solid black;
+  border: 5px solid #E9724C;
   border-radius: 15px;
   text-align: center;
   margin-left: 40%;
@@ -46,9 +48,34 @@
   flex: 100%;
   margin: 10px;
   font-size: 19px;
+  font-family:monospace;
+  background-color: #E9724C;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
 }
 
 .row2{
   width: 65%;
   text-align: center;
+}
+
+h1, h2, h3, p{
+  color: #E9724C;
+  font-family:monospace ;
+}
+
+h1{
+  font-size: 50px;
+}
+
+h2{
+  font-size: 30px;
+  text-align: center;
+}
+
+h3, p{
+  font-size: 30px;
 }
