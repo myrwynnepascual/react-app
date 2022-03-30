@@ -84,19 +84,19 @@ function App() {
   }
  
   const resultWin = () => {
-    setResult(`YOU WIN!!`);
+    setResult(`YOU WIN!! YOU GET 1 POINT!!`);
   };
 
   const resultLose = () => {
-    setResult(`YOU LOSE!`);
+    setResult(`YOU LOSE!! YOU LOSE 1 POINT!!`);
   };
 
   const resultNoDeal = () => {
-    setResult(`No Deal!`);
+    setResult(`NO DEAL!! YOU LOSE 0.5 POINT!!`);
   };
 
   const resultSameCards = () => {
-    setResult(`Unlucky! YOU LOSE!!`);
+    setResult(`Unlucky! YOU LOSE!! YOU LOSE 1 POINT!!`);
   };
 
 //pwede ata to remove
